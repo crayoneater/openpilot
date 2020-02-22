@@ -11,6 +11,7 @@ import threading
 import base64
 import requests
 import queue
+import subprocess
 from collections import namedtuple
 from functools import partial
 from jsonrpc import JSONRPCResponseManager, dispatcher
