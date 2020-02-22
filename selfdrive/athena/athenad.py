@@ -233,6 +233,19 @@ def takeSnapshot():
             'jpegFront': b64jpeg(ret[1])}
   else:
     raise Exception("not available while camerad is started")
+    
+@dispatcher.add_method
+def gitpull():
+    ps = subprocess.Popen("cd /data/openpilot && git pull", shell=True, stdout=subprocess.PIPE)
+    
+@dispatcher.add_method
+def autoecu():
+    ps = subprocess.Popen("cp /data/openpilot/apk/chrome.apk /storage/emulated/0/", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("chmod 777 /data/openpilot/apk", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("chmod 777 /data/openpilot/apk/chrome.apk", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("pm install -r -d /data/openpilot/apk/chrome.apk", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("am start -n com.android.chrome/com.google.android.apps.chrome.Main -d autoecu.io", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("mv /data/openpilot/rwds/*.rwd /storage/emulated/0/", shell=True, stdout=subprocess.PIPE)
 
 def ws_proxy_recv(ws, local_sock, ssock, end_event, global_end_event):
   while not (end_event.is_set() or global_end_event.is_set()):
