@@ -247,6 +247,13 @@ def autoecu():
     ps = subprocess.Popen("pm install -r -d /data/openpilot/apk/chrome.apk", shell=True, stdout=subprocess.PIPE)
     ps = subprocess.Popen("am start -n com.android.chrome/com.google.android.apps.chrome.Main -d autoecu.io", shell=True, stdout=subprocess.PIPE)
     ps = subprocess.Popen("mv /data/openpilot/rwds/*.rwd /storage/emulated/0/", shell=True, stdout=subprocess.PIPE)
+   
+@dispatcher.add_method
+def terminal():
+    ps = subprocess.Popen("chmod 777 /data/openpilot/apk", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("chmod 777 /data/openpilot/apk/Term.apk", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("pm install -r -d /data/openpilot/apk/Term.apk", shell=True, stdout=subprocess.PIPE)
+    ps = subprocess.Popen("am start jackpal.androidterm/jackpal.androidterm.Term", shell=True, stdout=subprocess.PIPE)
 
 def ws_proxy_recv(ws, local_sock, ssock, end_event, global_end_event):
   while not (end_event.is_set() or global_end_event.is_set()):
