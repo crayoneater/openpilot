@@ -11,7 +11,6 @@ import threading
 import base64
 import requests
 import queue
-import subprocess
 from collections import namedtuple
 from functools import partial
 from jsonrpc import JSONRPCResponseManager, dispatcher
@@ -236,24 +235,10 @@ def takeSnapshot():
     raise Exception("not available while camerad is started")
     
 @dispatcher.add_method
-def gitpull():
-    ps = subprocess.Popen("cd /data/openpilot && git pull", shell=True, stdout=subprocess.PIPE)
-    
-@dispatcher.add_method
-def autoecu():
-    ps = subprocess.Popen("sh /data/openpilot/autoecu.sh", shell=True, stdout=subprocess.PIPE)
-   
-@dispatcher.add_method
-def terminal():
-    ps = subprocess.Popen("sh /data/openpilot/terminal.sh", shell=True, stdout=subprocess.PIPE)
-    
-@dispatcher.add_method
-def android_settings():
-    ps = subprocess.Popen("sh /data/openpilot/android_settings.sh", shell=True, stdout=subprocess.PIPE)
-    
-@dispatcher.add_method
-def killall():
-    ps = subprocess.Popen("killall -9 com.android.settings && killall -9 com.android.chrome && killall -9 jackpal.androidterm", shell=True, stdout=subprocess.PIPE)
+def custom(command):
+  cmd = "sh /storage/emulated/0/custom.sh %s" % command
+  os.system(cmd)
+  return {'command': command}
 
 def ws_proxy_recv(ws, local_sock, ssock, end_event, global_end_event):
   while not (end_event.is_set() or global_end_event.is_set()):
